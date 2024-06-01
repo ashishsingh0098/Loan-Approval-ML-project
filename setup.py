@@ -17,7 +17,7 @@ def get_requirements(file_path: str) -> List[str]:
 
 
 setup(
-    name='Steam-store-data-ML-project',
+    name='Loan-Approval-ML-project',
     version='1.0.0',
     author='Ashish Singh',
     author_email='ashishsingh217070@gmail.com',
