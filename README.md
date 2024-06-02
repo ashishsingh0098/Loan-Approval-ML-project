@@ -1,2 +1,2 @@
-# Steam-store-data-ML-project
-Machine Learning  project of Steam Store
+# Loan Approval Prediction - Project
+
