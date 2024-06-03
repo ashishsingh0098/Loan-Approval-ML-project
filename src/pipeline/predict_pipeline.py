@@ -26,13 +26,13 @@ class PredictPipeline:
 
 
 class CustomData:
-    def __init__(self, Income: int, Age: int, Experience: int, CURRENT_JOB_YRS: int, CURRENT_HOUSE_YRS: int, Marital_Status: str, House_Ownership: str, Car_Ownership: str, Profession: str, CITY: str, STATE: str):
+    def __init__(self, Income: int, Age: int, Experience: int, CURRENT_JOB_YRS: int, CURRENT_HOUSE_YRS: int, Married_Single: str, House_Ownership: str, Car_Ownership: str, Profession: str, CITY: str, STATE: str):
         self.Income = Income
         self.Age = Age
         self.Experience = Experience
         self.CURRENT_JOB_YRS = CURRENT_JOB_YRS
         self.CURRENT_HOUSE_YRS = CURRENT_HOUSE_YRS
-        self.Marital_Status = Marital_Status
+        self.Married_Single = Married_Single
         self.House_Ownership = House_Ownership
         self.Car_Ownership = Car_Ownership
         self.Profession = Profession
@@ -48,7 +48,7 @@ class CustomData:
                 "Experience": [self.Experience],
                 "CURRENT_JOB_YRS": [self.CURRENT_JOB_YRS],
                 "CURRENT_HOUSE_YRS": [self.CURRENT_HOUSE_YRS],
-                "Marital_Status": [self.Marital_Status],
+                "Married_Single": [self.Married_Single],
                 "House_Ownership": [self.House_Ownership],
                 "Car_Ownership": [self.Car_Ownership],
                 "Profession": [self.Profession],

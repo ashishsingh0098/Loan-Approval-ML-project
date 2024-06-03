@@ -21,7 +21,7 @@ class DataTransformation:
     def get_data_transformer_object(self):
         try:
             numerical_columns = ["Income", "Age", "Experience", "CURRENT_JOB_YRS", "CURRENT_HOUSE_YRS"]
-            categorical_columns = ["Married/Single", "House_Ownership", "Car_Ownership", "Profession", "CITY", "STATE"]
+            categorical_columns = ["Married_Single", "House_Ownership", "Car_Ownership", "Profession", "CITY", "STATE"]
 
             preprocessor = ColumnTransformer([
                 ("numerical_scaler", StandardScaler(), numerical_columns),
@@ -55,7 +55,7 @@ class DataTransformation:
             logging.info("Applying preprocessing object on training dataframe and testing dataframe.")
 
             train_arr = preprocessing_obj.fit_transform(input_feature_train_df)
-            test_arr = preprocessing_obj.transform(input_feature_test_df)
+            test_arr = preprocessing_obj.fit_transform(input_feature_test_df)
 
             logging.info("Saved preprocessing object.")
 

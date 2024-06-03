@@ -7,4 +7,5 @@ Flask
 catboost
 xgboost
 dill
+flask_cors
 -e .

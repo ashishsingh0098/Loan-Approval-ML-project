@@ -27,7 +27,7 @@ class DataIngestion:
     def initate_data_ingestion(self):
         logging.info('Data ingestion method Started')
         try:
-            df = pd.read_json('/home/ashish/VScode files/Python files/projects/ML project/Loan-Approval-ML-project/notebook/data/loan_approval_dataset.json')
+            df = pd.read_csv('/home/ashish/VScode files/Python files/projects/ML project/Loan-Approval-ML-project/notebook/data/eda_results.csv')
             logging.info('Dataset read as pandas Dataframe')
 
             os.makedirs(os.path.dirname(self.ingestion_config.raw_data_path),exist_ok=True)
