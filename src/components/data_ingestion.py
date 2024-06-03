@@ -25,7 +25,7 @@ class DataIngestion:
         self.ingestion_config = DataIngestionConfig()
 
     def initate_data_ingestion(self):
-        logging.info('Data ingestion+ method Started')
+        logging.info('Data ingestion method Started')
         try:
             df = pd.read_json('/home/ashish/VScode files/Python files/projects/ML project/Loan-Approval-ML-project/notebook/data/loan_approval_dataset.json')
             logging.info('Dataset read as pandas Dataframe')
@@ -59,4 +59,4 @@ if __name__ == '__main__':
     train_arr, test_arr, _ = data_transformation.initiate_data_transformation(train_data,test_data)
 
     modeltrainer = ModelTrainer()
-    print(modeltrainer.initiate_model_trainer(train_arr, test_arr))
+    modeltrainer.initiate_model_trainer(train_arr, test_arr)

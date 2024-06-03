@@ -2,18 +2,15 @@ import os
 import sys
 from dataclasses import dataclass
 from catboost import CatBoostClassifier
-from sklearn.ensemble import (
-    AdaBoostClassifier,
-    GradientBoostingClassifier,
-    RandomForestClassifier
-)
-from sklearn.metrics import r2_score
+from sklearn.ensemble import AdaBoostClassifier,RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import *
 from sklearn.tree import DecisionTreeClassifier
-from xgboost import XGBRFClassifier
+from xgboost import XGBClassifier
+
 from src.exception import CustomException
 from src.logger import logging
-from src.utils import save_object, evaluate_models
+from src.utils import save_object, evaluate_models, model_metrics
 
 @dataclass
 class ModelTrainerConfig:
@@ -32,34 +29,61 @@ class ModelTrainer:
                 test_array[:, :-1],
                 test_array[:, -1]
             )
+
             models = {
-                "Random Forest": RandomForestClassifier(),
-                "Decision Tree": DecisionTreeClassifier(),
-                "Gradient Boosting": GradientBoostingClassifier(),
-                "XGBRegressor": XGBRFClassifier(),
-                "CatBoosting Regressor": CatBoostClassifier(verbose=False),
-                "AdaBoost Regressor": AdaBoostClassifier(algorithm= "SAMME"),
+                "Random Forest": RandomForestClassifier(n_estimators = 100, random_state = 21, n_jobs = -1,max_features = 7, max_depth = 30),
+                "Decision Tree": DecisionTreeClassifier(max_leaf_nodes=128, random_state = 21),
+                "XGBClassifier": XGBClassifier(),
+                "K-Neighbors Classifier": KNeighborsClassifier(),
+                "CatBoosting Classifier": CatBoostClassifier(verbose=False),
+                "AdaBoost Classifier": AdaBoostClassifier(algorithm="SAMME")
             }
 
-            model_report:dict = evaluate_models(X_train, y_train, X_test, y_test, models)
-            best_model_score = max(sorted(model_report.values()))
-            best_model_name = list(model_report.keys())[
-                list(model_report.values()).index(best_model_score)
-            ]
+            for model_name, model in models.items():
+                model.fit(X_train, y_train)
+
+                y_train_pred = model.predict(X_train)
+                y_test_pred = model.predict(X_test)
+
+                mae, rmse, r2_square = model_metrics(y_train, y_train_pred)
+                print(f"{model_name} Model performance for Training set")
+                print("- Root Mean Squared Error: {:.4f}".format(rmse))
+                print("- Mean Absolute Error: {:.4f}".format(mae))
+                print("- R2 Score: {:.4f}".format(r2_square))
+
+                mae, rmse, r2_square = model_metrics(y_test, y_test_pred)
+                print(f"{model_name} Model performance for Test set")
+                print("- Root Mean Squared Error: {:.4f}".format(rmse))
+                print("- Mean Absolute Error: {:.4f}".format(mae))
+                print("- R2 Score: {:.4f}".format(r2_square))
+                print('=' * 35)
+                print('\n')
+
+            best_model_score = max([model_metrics(y_test, model.predict(X_test))[2] for model in models.values()])
+            best_model_name = [list(models.keys())[list(models.values()).index(model)] for model in models.values() if model_metrics(y_test, model.predict(X_test))[2] == best_model_score][0]
             best_model = models[best_model_name]
 
             if best_model_score < 0.6:
                 raise CustomException("No best model found")
 
-            logging.info(f'Best model found on both training and testing dataset')
-            
+            print(f'Best Model Found , Model Name : {best_model_name} , R2 Score : {best_model_score}')
+            print('\n====================================================================================\n')
+            logging.info(f'Best Model Found , Model Name : {best_model_name} , R2 Score : {best_model_score}')
+                        
             save_object(
                 file_path=self.model_trainer_config.trained_model_file_path,
                 obj=best_model
             )
-            predicted = best_model.predict(X_test)
-            r2_square = r2_score(y_test, predicted)
-            return r2_square
+            
+            y_test_pred = best_model.predict(X_test)
+            mae, rmse, r2 = model_metrics(y_test, y_test_pred)
+
+            logging.info(f'Test MAE : {mae}')
+            logging.info(f'Test RMSE : {rmse}')
+            logging.info(f'Test R2 : {r2}')
+            logging.info('Final model training Completed')
+
+            return mae, rmse, r2
         
         except Exception as e:
             raise CustomException(e, sys)
