@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Approval Prediction</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="login mt-5">
+            <form action="{{ url_for('predict_datapoint')}}" method="post">
+                <fieldset>
+                    <legend>Loan Approval Prediction</legend>
+
+                    <div class="form-group">
+                        <label for="Income" class="form-label">Income (USD or INR):</label>
+                        <input class="form-control" type="number" name="Income" id="Income" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Age" class="form-label">Age (Years):</label>
+                        <input class="form-control" type="number" name="Age" id="Age" min="18" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Experience" class="form-label">Years of Experience:</label>
+                        <input class="form-control" type="number" name="Experience" id="Experience" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Married_Single" class="form-label">Marital Status:</label>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="Married_Single" id="married" value="married" required>
+                            <label class="form-check-label" for="married">Married</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="Married_Single" id="single" value="single" required>
+                            <label class="form-check-label" for="single">Single</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="House_Ownership" class="form-label">House Ownership:</label>
+                        <select class="form-control" name="House_Ownership" id="House_Ownership" required>
+                            <option value="">Select Ownership Status</option>
+                            <option value="rented">Rented</option>
+                            <option value="owned">Owned</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Car_Ownership" class="form-label">Car Ownership:</label>
+                        <select class="form-control" name="Car_Ownership" id="Car_Ownership" required>
+                            <option value="">Select Ownership Status</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Profession" class="form-label">Profession:</label>
+                        <input class="form-control" type="text" name="Profession" id="Profession">
+                    </div>
+                    <div class="form-group">
+                        <label for="CITY" class="form-label">City:</label>
+                        <input class="form-control" type="text" name="CITY" id="CITY">
+                    </div>
+                    <div class="form-group">
+                        <label for="STATE" class="form-label">State:</label>
+                        <input class="form-control" type="text" name="STATE" id="STATE">
+                    </div>
+                    <div class="form-group">
+                        <label for="CURRENT_JOB_YRS" class="form-label">Years at Current Job:</label>
+                        <input class="form-control" type="number" name="CURRENT_JOB_YRS" id="CURRENT_JOB_YRS" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="CURRENT_HOUSE_YRS" class="form-label">Years at Current Residence:</label>
+                        <input class="form-control" type="number" name="CURRENT_HOUSE_YRS" id="CURRENT_HOUSE_YRS" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <input class="btn btn-primary" type="submit" value="Predict Loan Approval">
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+
+        <h2>
+            The predicted loan approval probability is: {{ results }}  - 1 represents a flagged risky applicant and 0 represents a non-risky applicant.
+        </h2>
+    </div>
+</body>
+</html>
